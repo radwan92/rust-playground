@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m http.server -d ./pages 8080
+python -m http.server 8080
