@@ -11,7 +11,7 @@ use sdl2::render::WindowCanvas;
 pub mod emscripten;
 mod time;
 
-pub type Float = f32;
+pub type Float = f64;
 
 pub trait Game {
     fn handle_event(&mut self, event: Event) -> Option<Event> {
