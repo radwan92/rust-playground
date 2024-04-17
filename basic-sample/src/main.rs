@@ -1,7 +1,7 @@
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::render::WindowCanvas;
-use engine::*;
+use engine::{Engine, Float, Game};
 
 struct BasicGame {
     x: Float,
@@ -32,5 +32,6 @@ impl Game for BasicGame {
 }
 
 fn main() {
-    Engine::run_game(BasicGame { x: 0.0, y: 0.0, speed: 250.0 });
+    engine::create(BasicGame { x: 0.0, y: 0.0, speed: 250.0 })
+        .start();
 }

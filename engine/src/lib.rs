@@ -3,8 +3,10 @@ pub mod emscripten;
 
 mod time;
 mod game;
+mod engine_builder;
 
 pub use game::Game;
+pub use engine_builder::*;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -26,20 +28,11 @@ pub struct Engine {
 }
 
 impl Engine {
-    pub fn run_game<T>(game: T)
-        where
-            T: Game + 'static,
-    {
-        let game = Rc::new(RefCell::new(game));
-        let engine = Engine::new(game);
-        engine.start();
-    }
-
-    pub fn new(game: Rc<RefCell<dyn Game>>) -> Engine {
+    pub fn new(game: Rc<RefCell<dyn Game>>, width: u32, height: u32) -> Engine {
         let sdl = sdl2::init().unwrap();
         let video = sdl.video().unwrap();
 
-        let window = video.window("Hello world", 800, 600)
+        let window = video.window("Hello world", width, height)
             .position_centered()
             .build()
             .unwrap();
