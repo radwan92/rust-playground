@@ -1,3 +1,11 @@
+#[cfg(target_family = "wasm")]
+pub mod emscripten;
+
+mod time;
+mod game;
+
+pub use game::Game;
+
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::time::Duration;
@@ -7,20 +15,7 @@ use sdl2::keyboard::{Keycode, Scancode};
 use sdl2::pixels::Color;
 use sdl2::render::WindowCanvas;
 
-#[cfg(target_family = "wasm")]
-pub mod emscripten;
-mod time;
-
 pub type Float = f64;
-
-pub trait Game {
-    fn handle_event(&mut self, event: Event) -> Option<Event> {
-        event.into()
-    }
-
-    fn update(&mut self, dt: Float, eng: &Engine);
-    fn render(&self, canvas: &mut WindowCanvas);
-}
 
 pub struct Engine {
     running: bool,
@@ -32,8 +27,8 @@ pub struct Engine {
 
 impl Engine {
     pub fn run_game<T>(game: T)
-    where
-        T: Game + 'static,
+        where
+            T: Game + 'static,
     {
         let game = Rc::new(RefCell::new(game));
         let engine = Engine::new(game);
@@ -52,7 +47,7 @@ impl Engine {
         let canvas = window.into_canvas().build().unwrap();
         let event_pump = sdl.event_pump().unwrap();
 
-        Engine { running: true, event_pump, canvas, game, time: time::now()}
+        Engine { running: true, event_pump, canvas, game, time: time::now() }
     }
 
     pub fn start(self) {
@@ -92,9 +87,9 @@ impl Engine {
             for event in event_pump.poll_iter() {
                 if let Some(event) = engine.game.borrow_mut().handle_event(event) {
                     match event {
-                        Event::Quit {..} | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
+                        Event::Quit { .. } | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                             engine.running = false;
-                        },
+                        }
                         _ => ()
                     }
                 }
