@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-use std::rc::Rc;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::render::WindowCanvas;
@@ -34,7 +32,5 @@ impl Game for BasicGame {
 }
 
 fn main() {
-    let game = Rc::new(RefCell::new(BasicGame { x: 0.0, y: 0.0, speed: 250.0 }));
-    let engine = Engine::new(game);
-    engine.start();
+    Engine::run_game(BasicGame { x: 0.0, y: 0.0, speed: 250.0 });
 }

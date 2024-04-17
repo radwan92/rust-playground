@@ -31,6 +31,15 @@ pub struct Engine {
 }
 
 impl Engine {
+    pub fn run_game<T>(game: T)
+    where
+        T: Game + 'static,
+    {
+        let game = Rc::new(RefCell::new(game));
+        let engine = Engine::new(game);
+        engine.start();
+    }
+
     pub fn new(game: Rc<RefCell<dyn Game>>) -> Engine {
         let sdl = sdl2::init().unwrap();
         let video = sdl.video().unwrap();
