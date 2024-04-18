@@ -1,3 +1,5 @@
+#![deny(warnings)]
+
 #[cfg(target_family = "wasm")]
 pub mod emscripten;
 
