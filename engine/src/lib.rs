@@ -4,9 +4,11 @@ pub mod emscripten;
 mod time;
 mod game;
 mod engine_builder;
+mod dimensions;
 
 pub use game::Game;
-pub use engine_builder::*;
+pub use engine_builder::create;
+pub use dimensions::Dimensions;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -25,14 +27,37 @@ pub struct Engine {
     canvas: WindowCanvas,
     game: Rc<RefCell<dyn Game>>,
     time: Duration,
+    dimensions: Dimensions,
 }
 
+// API
 impl Engine {
-    pub fn new(game: Rc<RefCell<dyn Game>>, width: u32, height: u32) -> Engine {
+    pub fn draw_point(&mut self, x: i32, y: i32, color: Color) {
+        self.canvas.set_draw_color(color);
+
+        let draw_rect = dimensions::point_at(&self.dimensions, x, y);
+        self.canvas.fill_rect(draw_rect).unwrap()
+    }
+
+    pub fn draw_rect(&mut self, x: i32, y: i32, width: u32, height: u32, color: Color) {
+        self.canvas.set_draw_color(color);
+
+        let draw_rect = dimensions::rect_at(&self.dimensions, x, y, width, height);
+        self.canvas.fill_rect(draw_rect).unwrap()
+    }
+
+    pub fn is_key_pressed(&self, keycode: Keycode) -> bool {
+        self.event_pump.keyboard_state().is_scancode_pressed(Scancode::from_keycode(keycode).unwrap())
+    }
+}
+
+// Initialization and main loop
+impl Engine {
+    pub fn new(game: Rc<RefCell<dyn Game>>, dimensions: Dimensions) -> Engine {
         let sdl = sdl2::init().unwrap();
         let video = sdl.video().unwrap();
 
-        let window = video.window("Hello world", width, height)
+        let window = video.window("Hello world", dimensions.pixel_width(), dimensions.pixel_height())
             .position_centered()
             .build()
             .unwrap();
@@ -40,7 +65,14 @@ impl Engine {
         let canvas = window.into_canvas().build().unwrap();
         let event_pump = sdl.event_pump().unwrap();
 
-        Engine { running: true, event_pump, canvas, game, time: time::now() }
+        Engine {
+            running: true,
+            event_pump,
+            canvas,
+            game,
+            time: time::now(),
+            dimensions,
+        }
     }
 
     pub fn start(self) {
@@ -64,15 +96,13 @@ impl Engine {
 
         while engine.borrow().running {
             loop_func();
-            std::thread::sleep(std::time::Duration::from_millis(16));
+            std::thread::sleep(Duration::from_millis(16));
         }
     }
 
-    pub fn is_key_pressed(&self, keycode: Keycode) -> bool {
-        self.event_pump.keyboard_state().is_scancode_pressed(Scancode::from_keycode(keycode).unwrap())
-    }
-
     fn create_main_loop(engine: Rc<RefCell<Self>>) -> impl FnMut() {
+        let game = engine.borrow().game.clone();
+
         move || {
             let engine = &mut *engine.borrow_mut();
             let event_pump = &mut engine.event_pump;
@@ -92,16 +122,14 @@ impl Engine {
             let dt = now - engine.time;
             engine.time = now;
 
-            engine.game.borrow_mut().update(dt.as_secs_f64() as Float, engine);
+            game.borrow_mut().update(dt.as_secs_f64() as Float, engine);
 
-            let canvas = &mut engine.canvas;
+            engine.canvas.set_draw_color(Color::RGB(64, 64, 64));
+            engine.canvas.clear();
 
-            canvas.set_draw_color(Color::RGB(64, 64, 64));
-            canvas.clear();
+            game.borrow_mut().render(engine);
 
-            engine.game.borrow_mut().render(canvas);
-
-            canvas.present();
+            engine.canvas.present();
         }
     }
 }

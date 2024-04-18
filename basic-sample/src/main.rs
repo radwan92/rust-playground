@@ -1,6 +1,5 @@
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
-use sdl2::render::WindowCanvas;
 use engine::{Engine, Float, Game};
 
 struct BasicGame {
@@ -25,13 +24,13 @@ impl Game for BasicGame {
         }
     }
 
-    fn render(&self, canvas: &mut WindowCanvas) {
-        canvas.set_draw_color(Color::RGB(0, 255, 0));
-        canvas.fill_rect(sdl2::rect::Rect::new(self.x as i32, self.y as i32, 20, 20)).unwrap();
+    fn render(&self, engine: &mut Engine) {
+        engine.draw_rect(self.x as i32, self.y as i32, 20, 20, Color::RGB(0, 255, 0));
     }
 }
 
 fn main() {
     engine::create(BasicGame { x: 0.0, y: 0.0, speed: 250.0 })
+        .with_dimensions(1, 800, 600)
         .start();
 }
