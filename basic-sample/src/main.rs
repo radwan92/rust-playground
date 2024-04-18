@@ -31,6 +31,6 @@ impl Game for BasicGame {
 
 fn main() {
     engine::create(BasicGame { x: 0.0, y: 0.0, speed: 250.0 })
-        .with_dimensions(1, 800, 600)
+        .with_stretched_dimensions(1)
         .start();
 }

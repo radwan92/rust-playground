@@ -26,6 +26,11 @@ extern "C" {
 
     pub fn emscripten_get_now() -> f64;
 
+    pub fn emscripten_get_screen_size(
+        width: *mut c_int,
+        height: *mut c_int,
+    );
+
     pub fn emscripten_cancel_main_loop();
 }
 
@@ -38,6 +43,15 @@ thread_local! {
     // Box<dyn ...> - make it work generically for any closure passed in
 
     static MAIN_LOOP_CLOSURE: RefCell<Option<Box<dyn FnMut()>>> = RefCell::new(None);
+}
+
+pub fn get_screen_size() -> (u32, u32) {
+    let mut width = 0;
+    let mut height = 0;
+    unsafe {
+        emscripten_get_screen_size(&mut width, &mut height);
+    }
+    (width as u32, height as u32)
 }
 
 // Schedules the given callback to be run over and over in a loop until it returns MainLoopEvent::Terminate.

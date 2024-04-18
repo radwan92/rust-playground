@@ -21,6 +21,29 @@ impl EngineBuilder {
         self
     }
 
+    pub fn with_stretched_dimensions(mut self, point_size: u32) -> EngineBuilder {
+        let width: u32;
+        let height: u32;
+
+        #[cfg(not(target_family = "wasm"))]
+        {
+            let sdl = sdl2::init().unwrap();
+            let video = sdl.video().unwrap();
+            let screen_size = video.display_bounds(0).unwrap();
+            (width, height) = (screen_size.width(), screen_size.height());
+        }
+
+        #[cfg(target_family = "wasm")]
+        {
+            (width, height) = crate::emscripten::get_screen_size();
+        }
+
+        let (dim_width, dim_height) = (width / point_size, height / point_size);
+        self.dimensions = Dimensions::new(point_size, dim_width, dim_height);
+
+        self
+    }
+
     pub fn build(self) -> Engine {
         Engine::new(self.game, self.dimensions)
     }
