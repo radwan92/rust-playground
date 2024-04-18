@@ -23,6 +23,9 @@ extern "C" {
         fps: c_int,
         simulate_infinite_loop: c_int,
     );
+
+    pub fn emscripten_get_now() -> f64;
+
     pub fn emscripten_cancel_main_loop();
 }
 
