@@ -1,5 +1,5 @@
-use sdl2::event::Event;
 use crate::{Engine, Float};
+use sdl2::event::Event;
 
 pub trait Game {
     fn handle_event(&mut self, event: Event) -> Option<Event> {

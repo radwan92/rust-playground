@@ -14,7 +14,13 @@ pub fn point_at(dimensions: &Dimensions, x: i32, y: i32) -> sdl2::rect::Rect {
     )
 }
 
-pub fn rect_at(dimensions: &Dimensions, x: i32, y: i32, width: u32, height: u32) -> sdl2::rect::Rect {
+pub fn rect_at(
+    dimensions: &Dimensions,
+    x: i32,
+    y: i32,
+    width: u32,
+    height: u32,
+) -> sdl2::rect::Rect {
     sdl2::rect::Rect::new(
         x * dimensions.point_size() as i32,
         y * dimensions.point_size() as i32,
@@ -25,7 +31,11 @@ pub fn rect_at(dimensions: &Dimensions, x: i32, y: i32, width: u32, height: u32)
 
 impl Dimensions {
     pub fn new(point_size: u32, width: u32, height: u32) -> Dimensions {
-        Dimensions { width, height, point_size }
+        Dimensions {
+            width,
+            height,
+            point_size,
+        }
     }
 
     pub fn default() -> Dimensions {

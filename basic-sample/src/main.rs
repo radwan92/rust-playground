@@ -1,6 +1,6 @@
+use engine::{Engine, Float, Game};
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
-use engine::{Engine, Float, Game};
 
 struct BasicGame {
     x: Float,
@@ -30,7 +30,14 @@ impl Game for BasicGame {
 }
 
 fn main() {
-    engine::create(BasicGame { x: 0.0, y: 0.0, speed: 250.0 }, String::from("Basic Sample"))
-        .with_stretched_dimensions(1)
-        .start();
+    engine::create(
+        BasicGame {
+            x: 0.0,
+            y: 0.0,
+            speed: 250.0,
+        },
+        String::from("Basic Sample"),
+    )
+    .with_stretched_dimensions(1)
+    .start();
 }

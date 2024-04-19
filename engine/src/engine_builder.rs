@@ -1,7 +1,7 @@
-use std::rc::Rc;
-use std::cell::RefCell;
-use sdl2::pixels::Color;
 use crate::{Dimensions, Engine, Game};
+use sdl2::pixels::Color;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 pub struct EngineBuilder {
     game: Rc<RefCell<dyn Game>>,
@@ -11,7 +11,9 @@ pub struct EngineBuilder {
 }
 
 pub fn create<T>(game: T, game_title: String) -> EngineBuilder
-    where T: Game + 'static {
+where
+    T: Game + 'static,
+{
     EngineBuilder {
         game: Rc::new(RefCell::new(game)),
         game_title,
@@ -26,12 +28,21 @@ impl EngineBuilder {
         self
     }
 
-    pub fn with_dimensions(mut self, point_size: u32, width_in_points: u32, height_in_points: u32) -> EngineBuilder {
+    pub fn with_dimensions(
+        mut self,
+        point_size: u32,
+        width_in_points: u32,
+        height_in_points: u32,
+    ) -> EngineBuilder {
         self.dimensions = Dimensions::new(point_size, width_in_points, height_in_points);
         self
     }
 
-    pub fn with_point_dimensions(mut self, width_in_points: u32, height_in_points: u32) -> EngineBuilder {
+    pub fn with_point_dimensions(
+        mut self,
+        width_in_points: u32,
+        height_in_points: u32,
+    ) -> EngineBuilder {
         let (width, height) = EngineBuilder::get_screen_size();
 
         let point_width = width / width_in_points;
@@ -53,7 +64,12 @@ impl EngineBuilder {
     }
 
     pub fn build(self) -> Engine {
-        Engine::new(self.game, self.game_title, self.dimensions, self.background_color)
+        Engine::new(
+            self.game,
+            self.game_title,
+            self.dimensions,
+            self.background_color,
+        )
     }
 
     pub fn start(self) {

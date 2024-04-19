@@ -1,9 +1,9 @@
-mod direction;
 mod cell;
+mod direction;
 
+use cell::Cell;
 use rand::random;
 use sdl2::pixels::Color;
-use cell::Cell;
 
 use engine::{Engine, Float, Game, Point};
 
@@ -29,10 +29,7 @@ impl Maze {
     }
 
     fn get_cell_xy(&mut self, x: i32, y: i32) -> Option<&mut Cell> {
-        if x >= self.width as i32
-            || y >= self.height as i32
-            || x < 0
-            || y < 0 {
+        if x >= self.width as i32 || y >= self.height as i32 || x < 0 || y < 0 {
             return None;
         }
 
@@ -54,7 +51,11 @@ impl Maze {
         }
     }
 
-    fn get_neighbor_cell(&mut self, position: Point, direction: direction::Type) -> Option<&mut Cell> {
+    fn get_neighbor_cell(
+        &mut self,
+        position: Point,
+        direction: direction::Type,
+    ) -> Option<&mut Cell> {
         let neighbor_position = self.get_neighbor_cell_position(position, direction);
         self.get_cell_xy(neighbor_position.x, neighbor_position.y)
     }
@@ -66,13 +67,17 @@ impl Maze {
         for py in 0..self.path_width {
             for px in 0..self.path_width {
                 if cell.visited {
-                    engine.draw_point(x * (self.path_width + 1) + px + CELL_BORDER_OFFSET,
-                                      y * (self.path_width + 1) + py + CELL_BORDER_OFFSET,
-                                      Color::WHITE)
+                    engine.draw_point(
+                        x * (self.path_width + 1) + px + CELL_BORDER_OFFSET,
+                        y * (self.path_width + 1) + py + CELL_BORDER_OFFSET,
+                        Color::WHITE,
+                    )
                 } else {
-                    engine.draw_point(x * (self.path_width + 1) + px + CELL_BORDER_OFFSET,
-                                      y * (self.path_width + 1) + py + CELL_BORDER_OFFSET,
-                                      Color::BLUE)
+                    engine.draw_point(
+                        x * (self.path_width + 1) + px + CELL_BORDER_OFFSET,
+                        y * (self.path_width + 1) + py + CELL_BORDER_OFFSET,
+                        Color::BLUE,
+                    )
                 }
             }
         }
@@ -80,15 +85,19 @@ impl Maze {
         // Draw paths
         for p in 0..self.path_width {
             if cell.paths & direction::SOUTH != 0 {
-                engine.draw_point(x * (self.path_width + 1) + p + CELL_BORDER_OFFSET,
-                                  y * (self.path_width + 1) + self.path_width + CELL_BORDER_OFFSET,
-                                  Color::WHITE)
+                engine.draw_point(
+                    x * (self.path_width + 1) + p + CELL_BORDER_OFFSET,
+                    y * (self.path_width + 1) + self.path_width + CELL_BORDER_OFFSET,
+                    Color::WHITE,
+                )
             }
 
             if cell.paths & direction::EAST != 0 {
-                engine.draw_point(x * (self.path_width + 1) + self.path_width + CELL_BORDER_OFFSET,
-                                  y * (self.path_width + 1) + p + CELL_BORDER_OFFSET,
-                                  Color::WHITE)
+                engine.draw_point(
+                    x * (self.path_width + 1) + self.path_width + CELL_BORDER_OFFSET,
+                    y * (self.path_width + 1) + p + CELL_BORDER_OFFSET,
+                    Color::WHITE,
+                )
             }
         }
     }
@@ -144,7 +153,12 @@ impl Game for Maze {
             neighbors
         }
 
-        fn add_unvisited_neighbour(maze: &mut Maze, current_cell: Point, neighbors: &mut Vec<direction::Type>, direction: direction::Type) {
+        fn add_unvisited_neighbour(
+            maze: &mut Maze,
+            current_cell: Point,
+            neighbors: &mut Vec<direction::Type>,
+            direction: direction::Type,
+        ) {
             let neighbor = maze.get_neighbor_cell(current_cell, direction);
             if let Some(cell) = neighbor {
                 if !cell.visited {

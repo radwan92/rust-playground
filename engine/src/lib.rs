@@ -3,15 +3,15 @@
 #[cfg(target_family = "wasm")]
 pub mod emscripten;
 
-mod time;
-mod game;
-mod engine_builder;
 mod dimensions;
+mod engine_builder;
+mod game;
 mod point;
+mod time;
 
-pub use game::Game;
-pub use engine_builder::create;
 pub use dimensions::Dimensions;
+pub use engine_builder::create;
+pub use game::Game;
 pub use point::Point;
 
 use std::cell::RefCell;
@@ -52,7 +52,9 @@ impl Engine {
     }
 
     pub fn is_key_pressed(&self, keycode: Keycode) -> bool {
-        self.event_pump.keyboard_state().is_scancode_pressed(Scancode::from_keycode(keycode).unwrap())
+        self.event_pump
+            .keyboard_state()
+            .is_scancode_pressed(Scancode::from_keycode(keycode).unwrap())
     }
 }
 
@@ -62,12 +64,17 @@ impl Engine {
         game: Rc<RefCell<dyn Game>>,
         game_title: String,
         dimensions: Dimensions,
-        background_color: Color) -> Engine
-    {
+        background_color: Color,
+    ) -> Engine {
         let sdl = sdl2::init().unwrap();
         let video = sdl.video().unwrap();
 
-        let window = video.window(game_title.as_str(), dimensions.pixel_width(), dimensions.pixel_height())
+        let window = video
+            .window(
+                game_title.as_str(),
+                dimensions.pixel_width(),
+                dimensions.pixel_height(),
+            )
             .position_centered()
             .build()
             .unwrap();
@@ -101,7 +108,10 @@ impl Engine {
         // Set the canvas size to match the pixel dimensions
         {
             let dimensions = &engine.borrow().dimensions;
-            emscripten::set_canvas_element_size(dimensions.pixel_width(), dimensions.pixel_height());
+            emscripten::set_canvas_element_size(
+                dimensions.pixel_width(),
+                dimensions.pixel_height(),
+            );
         }
 
         emscripten::set_main_loop_callback(Engine::create_main_loop(engine));
@@ -127,10 +137,14 @@ impl Engine {
             for event in event_pump.poll_iter() {
                 if let Some(event) = engine.game.borrow_mut().handle_event(event) {
                     match event {
-                        Event::Quit { .. } | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
+                        Event::Quit { .. }
+                        | Event::KeyDown {
+                            keycode: Some(Keycode::Escape),
+                            ..
+                        } => {
                             engine.running = false;
                         }
-                        _ => ()
+                        _ => (),
                     }
                 }
             }

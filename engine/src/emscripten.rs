@@ -26,10 +26,7 @@ extern "C" {
 
     pub fn emscripten_get_now() -> f64;
 
-    pub fn emscripten_get_screen_size(
-        width: *mut c_int,
-        height: *mut c_int,
-    );
+    pub fn emscripten_get_screen_size(width: *mut c_int, height: *mut c_int);
 
     pub fn emscripten_cancel_main_loop();
 
