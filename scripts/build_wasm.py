@@ -1,5 +1,5 @@
 # Take emsdk path from command line and compile project for wasm
-# Usage: python build_wasm.py <path_to_emsdk>
+# Usage: python build_wasm.py <path_to_emsdk> <project_name>
 # Note: windows only
 
 import os
@@ -28,16 +28,16 @@ def build_project(emsdk_path, project_name):
 
 def main():
     # Ensure that the user has provided the path to emsdk
-    if len(sys.argv) != 2:
-        print("Usage: python build_wasm.py <path_to_emsdk>")
+    if len(sys.argv) != 3:
+        print("Usage: python build_wasm.py <path_to_emsdk> <project_name>")
         sys.exit(1)
 
-    # Get the path to emsdk
     emsdk_path = sys.argv[1]
+    project_name = sys.argv[2]
 
     install_emsdk(emsdk_path)
     build_sdl2(emsdk_path)
     os.environ["EMCC_CFLAGS"] = "-s USE_SDL=2"
-    build_project(emsdk_path, "basic-sample")
+    build_project(emsdk_path, project_name)
 
 main()
