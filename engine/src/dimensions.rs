@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Dimensions {
     point_size: u32,
     width: u32,
