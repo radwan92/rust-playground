@@ -38,10 +38,6 @@ impl Dimensions {
         }
     }
 
-    pub fn default() -> Dimensions {
-        Dimensions::new(1, 800, 600)
-    }
-
     /// Size of a point in pixels
     pub fn point_size(&self) -> u32 {
         self.point_size
@@ -65,5 +61,11 @@ impl Dimensions {
     /// Height in pixels
     pub fn pixel_height(&self) -> u32 {
         self.height * self.point_size
+    }
+}
+
+impl Default for Dimensions {
+    fn default() -> Self {
+        Dimensions::new(1, 800, 600)
     }
 }
