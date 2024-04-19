@@ -28,7 +28,37 @@ impl EngineBuilder {
         self.dimensions = Dimensions::new(point_size, width_in_points, height_in_points);
         self
     }
+
+    pub fn with_point_dimensions(mut self, width_in_points: u32, height_in_points: u32) -> EngineBuilder {
+        let (width, height) = EngineBuilder::get_screen_size();
+
+        let point_width = width / width_in_points;
+        let point_height = height / height_in_points;
+        let point_size = std::cmp::min(point_width, point_height);
+
+        self.dimensions = Dimensions::new(point_size, width_in_points, height_in_points);
+
+        self
+    }
+
     pub fn with_stretched_dimensions(mut self, point_size: u32) -> EngineBuilder {
+        let (width, height) = EngineBuilder::get_screen_size();
+
+        let (dim_width, dim_height) = (width / point_size, height / point_size);
+        self.dimensions = Dimensions::new(point_size, dim_width, dim_height);
+
+        self
+    }
+
+    pub fn build(self) -> Engine {
+        Engine::new(self.game, self.dimensions, self.background_color)
+    }
+
+    pub fn start(self) {
+        self.build().start();
+    }
+
+    fn get_screen_size() -> (u32, u32) {
         let width: u32;
         let height: u32;
 
@@ -45,17 +75,6 @@ impl EngineBuilder {
             (width, height) = crate::emscripten::get_screen_size();
         }
 
-        let (dim_width, dim_height) = (width / point_size, height / point_size);
-        self.dimensions = Dimensions::new(point_size, dim_width, dim_height);
-
-        self
-    }
-
-    pub fn build(self) -> Engine {
-        Engine::new(self.game, self.dimensions)
-    }
-
-    pub fn start(self) {
-        self.build().start();
+        (width, height)
     }
 }
