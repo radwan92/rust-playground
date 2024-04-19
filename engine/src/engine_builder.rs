@@ -5,14 +5,16 @@ use crate::{Dimensions, Engine, Game};
 
 pub struct EngineBuilder {
     game: Rc<RefCell<dyn Game>>,
+    game_title: String,
     dimensions: Dimensions,
     background_color: Color,
 }
 
-pub fn create<T>(game: T) -> EngineBuilder
+pub fn create<T>(game: T, game_title: String) -> EngineBuilder
     where T: Game + 'static {
     EngineBuilder {
         game: Rc::new(RefCell::new(game)),
+        game_title,
         dimensions: Dimensions::default(),
         background_color: Color::BLACK,
     }
@@ -51,7 +53,7 @@ impl EngineBuilder {
     }
 
     pub fn build(self) -> Engine {
-        Engine::new(self.game, self.dimensions, self.background_color)
+        Engine::new(self.game, self.game_title, self.dimensions, self.background_color)
     }
 
     pub fn start(self) {

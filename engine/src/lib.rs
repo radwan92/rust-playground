@@ -56,11 +56,16 @@ impl Engine {
 
 // Initialization and main loop
 impl Engine {
-    pub fn new(game: Rc<RefCell<dyn Game>>, dimensions: Dimensions, background_color: Color) -> Engine {
+    pub fn new(
+        game: Rc<RefCell<dyn Game>>,
+        game_title: String,
+        dimensions: Dimensions,
+        background_color: Color) -> Engine
+    {
         let sdl = sdl2::init().unwrap();
         let video = sdl.video().unwrap();
 
-        let window = video.window("Hello world", dimensions.pixel_width(), dimensions.pixel_height())
+        let window = video.window(game_title.as_str(), dimensions.pixel_width(), dimensions.pixel_height())
             .position_centered()
             .build()
             .unwrap();
