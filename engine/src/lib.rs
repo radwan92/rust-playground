@@ -98,6 +98,12 @@ impl Engine {
 
     #[cfg(target_family = "wasm")]
     fn start_emscripten(engine: Rc<RefCell<Engine>>) {
+        // Set the canvas size to match the pixel dimensions
+        {
+            let dimensions = &engine.borrow().dimensions;
+            emscripten::set_canvas_element_size(dimensions.pixel_width(), dimensions.pixel_height());
+        }
+
         emscripten::set_main_loop_callback(Engine::create_main_loop(engine));
     }
 

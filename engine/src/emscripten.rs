@@ -38,6 +38,12 @@ extern "C" {
         width: *mut c_int,
         height: *mut c_int,
     );
+
+    pub fn emscripten_set_canvas_element_size(
+        target: *const u8,
+        width: c_int,
+        height: c_int,
+    ) -> c_int;
 }
 
 thread_local! {
@@ -69,6 +75,13 @@ pub fn get_canvas_element_size() -> (u32, u32) {
         emscripten_get_canvas_element_size(target.as_ptr(), &mut width, &mut height);
     }
     (width as u32, height as u32)
+}
+
+pub fn set_canvas_element_size(width: u32, height: u32) {
+    let target = b"canvas\0";
+    unsafe {
+        emscripten_set_canvas_element_size(target.as_ptr(), width as c_int, height as c_int);
+    }
 }
 
 // Schedules the given callback to be run over and over in a loop until it returns MainLoopEvent::Terminate.
