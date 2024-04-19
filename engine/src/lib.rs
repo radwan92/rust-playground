@@ -7,10 +7,12 @@ mod time;
 mod game;
 mod engine_builder;
 mod dimensions;
+mod point;
 
 pub use game::Game;
 pub use engine_builder::create;
 pub use dimensions::Dimensions;
+pub use point::Point;
 
 use std::cell::RefCell;
 use std::rc::Rc;
