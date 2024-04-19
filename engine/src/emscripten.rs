@@ -32,6 +32,12 @@ extern "C" {
     );
 
     pub fn emscripten_cancel_main_loop();
+
+    pub fn emscripten_get_canvas_element_size(
+        target: *const u8,
+        width: *mut c_int,
+        height: *mut c_int,
+    );
 }
 
 thread_local! {
@@ -50,6 +56,17 @@ pub fn get_screen_size() -> (u32, u32) {
     let mut height = 0;
     unsafe {
         emscripten_get_screen_size(&mut width, &mut height);
+    }
+    (width as u32, height as u32)
+}
+
+pub fn get_canvas_element_size() -> (u32, u32) {
+    let mut width = 0;
+    let mut height = 0;
+    let target = b"canvas\0";
+
+    unsafe {
+        emscripten_get_canvas_element_size(target.as_ptr(), &mut width, &mut height);
     }
     (width as u32, height as u32)
 }

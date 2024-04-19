@@ -74,7 +74,7 @@ impl EngineBuilder {
 
         #[cfg(target_family = "wasm")]
         {
-            (width, height) = crate::emscripten::get_screen_size();
+            (width, height) = crate::emscripten::get_canvas_element_size();
         }
 
         (width, height)
