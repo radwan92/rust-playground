@@ -30,6 +30,7 @@ pub struct Engine {
     game: Rc<RefCell<dyn Game>>,
     time: Duration,
     dimensions: Dimensions,
+    background_color: Color,
 }
 
 // API
@@ -55,7 +56,7 @@ impl Engine {
 
 // Initialization and main loop
 impl Engine {
-    pub fn new(game: Rc<RefCell<dyn Game>>, dimensions: Dimensions) -> Engine {
+    pub fn new(game: Rc<RefCell<dyn Game>>, dimensions: Dimensions, background_color: Color) -> Engine {
         let sdl = sdl2::init().unwrap();
         let video = sdl.video().unwrap();
 
@@ -74,6 +75,7 @@ impl Engine {
             game,
             time: time::now(),
             dimensions,
+            background_color,
         }
     }
 
@@ -126,7 +128,7 @@ impl Engine {
 
             game.borrow_mut().update(dt.as_secs_f64() as Float, engine);
 
-            engine.canvas.set_draw_color(Color::RGB(64, 64, 64));
+            engine.canvas.set_draw_color(engine.background_color);
             engine.canvas.clear();
 
             game.borrow_mut().render(engine);

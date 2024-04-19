@@ -1,10 +1,12 @@
 use std::rc::Rc;
 use std::cell::RefCell;
+use sdl2::pixels::Color;
 use crate::{Dimensions, Engine, Game};
 
 pub struct EngineBuilder {
     game: Rc<RefCell<dyn Game>>,
     dimensions: Dimensions,
+    background_color: Color,
 }
 
 pub fn create<T>(game: T) -> EngineBuilder
@@ -12,15 +14,20 @@ pub fn create<T>(game: T) -> EngineBuilder
     EngineBuilder {
         game: Rc::new(RefCell::new(game)),
         dimensions: Dimensions::default(),
+        background_color: Color::BLACK,
     }
 }
 
 impl EngineBuilder {
-    pub fn with_dimensions(mut self, point_size: u32, width: u32, height: u32) -> EngineBuilder {
-        self.dimensions = Dimensions::new(point_size, width, height);
+    pub fn with_background_color(mut self, color: Color) -> EngineBuilder {
+        self.background_color = color;
         self
     }
 
+    pub fn with_dimensions(mut self, point_size: u32, width_in_points: u32, height_in_points: u32) -> EngineBuilder {
+        self.dimensions = Dimensions::new(point_size, width_in_points, height_in_points);
+        self
+    }
     pub fn with_stretched_dimensions(mut self, point_size: u32) -> EngineBuilder {
         let width: u32;
         let height: u32;
