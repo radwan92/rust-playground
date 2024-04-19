@@ -24,7 +24,7 @@ impl Game for BasicGame {
         }
     }
 
-    fn render(&self, engine: &mut Engine) {
+    fn render(&mut self, engine: &mut Engine) {
         engine.draw_rect(self.x as i32, self.y as i32, 20, 20, Color::RGB(0, 255, 0));
     }
 }

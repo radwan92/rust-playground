@@ -7,5 +7,5 @@ pub trait Game {
     }
 
     fn update(&mut self, dt: Float, engine: &Engine);
-    fn render(&self, engine: &mut Engine);
+    fn render(&mut self, engine: &mut Engine);
 }
