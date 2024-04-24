@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "basic-sample"
+name = "basic_sample"
 version = "0.1.0"
 dependencies = [
  "engine",

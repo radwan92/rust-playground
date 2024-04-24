@@ -5,13 +5,13 @@ edition = "2021"
 
 [workspace]
 members = [
-    "basic-sample",
+    "basic_sample",
     "engine", "maze",
 ]
 
 [[bin]]
-name = "basic-sample"
-path = "basic-sample"
+name = "basic_sample"
+path = "basic_sample"
 
 [[bin]]
 name = "maze"
