@@ -1,7 +1,8 @@
 # Rust Playground
 
-This is a collection of projects (re)created for the purpose of learning Rust.
-Many (if not all) of the projects will come from the [One Lone Coder](https://www.youtube.com/@javidx9) YouTube channel.
+Some small project to learn Rust.
+
+The "maze" project comes from the [One Lone Coder](https://www.youtube.com/@javidx9) YouTube channel.
 Kudos to Javidx9 for providing such a great content!
 
 All projects can be seen in action on the GitHub pages of this project:
